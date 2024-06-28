@@ -2,6 +2,7 @@ LICENSE
 README.md
 setup.cfg
 setup.py
+fullmetalcopy/__init__.py
 fullmetalcopy/drivers.py
 fullmetalcopy/names.py
 fullmetalcopy/query.py
