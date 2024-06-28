@@ -2,8 +2,9 @@ import typing as _t
 import io as _io
 
 import sqlalchemy.ext.asyncio as _sa_asyncio
+import asyncpg as _asyncpg
+import fullmetalcopy.asynchronous.apg.connection as _connection
 
-import fullmetalcopy.drivers as _drivers
 
 
 async def copy_from_csv(
@@ -22,7 +23,7 @@ async def copy_from_csv(
     Example
     -------
     >>> from sqlalchemy.ext.asyncio import create_async_engine
-    >>> from pgcopyinsert.asynchronous.copy import copy_from_csv
+    >>> from pgcopyinsert.asynchronous.apg.copy import copy_from_csv
 
     >>> async_engine = sa.create_async_engine('postgresql+asyncpg://user:password@host:port/dbname')
     >>> async with async_engine.connect() as async_connection:
@@ -32,14 +33,10 @@ async def copy_from_csv(
 
     >>> await async_engine.dispose()
     """
-    driver: str = _drivers.connection_driver_name(async_connection)
-    if driver == 'psycopg':
-        import fullmetalcopy.asynchronous.pg3.copy as _pg3_copy
-        await _pg3_copy.copy_from_csv(async_connection, csv_file, table_name,
-                                      sep, null, columns, headers, schema)
-    elif driver == 'asyncpg':
-        import fullmetalcopy.asynchronous.apg.copy as _apg_copy
-        await _apg_copy.copy_from_csv(async_connection, csv_file, table_name,
-                                      sep, null, columns, headers, schema)
-    else:
-        raise ValueError('driver must be psycopg of asyncpg')
+    apg_async_connection: _asyncpg.Connection
+    apg_async_connection = await _connection.get_driver_connection(async_connection)
+    await apg_async_connection.copy_to_table(
+            table_name, source=csv_file, delimiter=sep,
+            header=headers, null=null, columns=columns,
+            schema_name=schema, format='csv'
+        )
