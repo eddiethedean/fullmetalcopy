@@ -9,8 +9,6 @@ Here are just a few of the things that fullmetalcopy does:
 
   - Choice of psycopg, psycopg2, or asyncpg driver
   - Copy csv to table
-  - Copy Pandas DataFrame to table
-  - Copy Polars DataFrame to table
   - Async (psycopg or asyncpg) and Sync (psycopg or psycopg2) functions
 
 ## Where to get it

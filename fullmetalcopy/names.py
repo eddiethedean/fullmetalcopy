@@ -1,4 +1,5 @@
 import typing as _t
+import io as _io
 
 
 def adapt_names(
@@ -11,7 +12,8 @@ def adapt_names(
 ) -> tuple[str, list[str] | None]:
     column_names: list[str] | None
     if headers:
-        first_line: str = csv_file.readline().strip()
+        with _io.TextIOWrapper(csv_file, encoding='utf-8') as text_file:
+            first_line: str = text_file.readline().strip()
         if columns is None:
             column_names = first_line.split(sep)
         else:
