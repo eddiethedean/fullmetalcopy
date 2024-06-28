@@ -1,0 +1,13 @@
+LICENSE
+README.md
+setup.cfg
+setup.py
+fullmetalcopy/drivers.py
+fullmetalcopy/names.py
+fullmetalcopy/query.py
+fullmetalcopy.egg-info/PKG-INFO
+fullmetalcopy.egg-info/SOURCES.txt
+fullmetalcopy.egg-info/dependency_links.txt
+fullmetalcopy.egg-info/not-zip-safe
+fullmetalcopy.egg-info/requires.txt
+fullmetalcopy.egg-info/top_level.txt
