@@ -33,10 +33,10 @@ def copy_from_csv(
     driver: str = _drivers.connection_driver_name(connection)
 
     if driver == 'psycopg':
-        import fullmetalcopy.synchronous.pg3.copy as _pg3_copy
+        import fullmetalcopy.synchronous.pg3.copycsv as _pg3_copy
         _pg3_copy.copy_from_csv(connection, csv_file, table_name, sep, null, columns, headers, schema)
-    elif driver == 'pscopg2':
-        import fullmetalcopy.synchronous.pg2.copy as _pg2_copy
+    elif driver == 'psycopg2':
+        import fullmetalcopy.synchronous.pg2.copycsv as _pg2_copy
         _pg2_copy.copy_from_csv(connection, csv_file, table_name, sep, null, columns, headers, schema)
     else:
         raise ValueError('driver must be psycopg or pscopg2')

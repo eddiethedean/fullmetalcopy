@@ -12,8 +12,8 @@ def adapt_names(
 ) -> tuple[str, list[str] | None]:
     column_names: list[str] | None
     if headers:
-        with _io.TextIOWrapper(csv_file, encoding='utf-8') as text_file:
-            first_line: str = text_file.readline().strip()
+        b_first_line: bytes = csv_file.readline()
+        first_line: str = b_first_line.decode().strip()
         if columns is None:
             column_names = first_line.split(sep)
         else:

@@ -8,7 +8,7 @@ import fullmetalcopy.synchronous.pg2.connection as _connection
 
 
 def copy_from_csv(
-    connection: _sa.connection,
+    connection: _sa.engine.base.Connection,
     csv_file: _io.BytesIO,
     table_name: str,
     sep: str = ',',
@@ -31,7 +31,9 @@ def copy_from_csv(
     ...         copy_from_csv(connection, csv_file, 'people')
     ...     connection.commit()
     """
+    print('csv is closed?', csv_file.closed)
     table_name, column_names = _names.adapt_names(csv_file, table_name, sep, columns, headers, schema)
+    print('csv is closed?', csv_file.closed)
     pg2_connection: _psycopg.connection = _connection.get_driver_connection(connection)
     cursor: _psycopg.cursor = pg2_connection.cursor()
     with _io.TextIOWrapper(csv_file, encoding='utf-8') as text_file:

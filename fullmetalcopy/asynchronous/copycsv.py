@@ -34,11 +34,11 @@ async def copy_from_csv(
     """
     driver: str = _drivers.connection_driver_name(async_connection)
     if driver == 'psycopg':
-        import fullmetalcopy.asynchronous.pg3.copy as _pg3_copy
+        import fullmetalcopy.asynchronous.pg3.copycsv as _pg3_copy
         await _pg3_copy.copy_from_csv(async_connection, csv_file, table_name,
                                       sep, null, columns, headers, schema)
     elif driver == 'asyncpg':
-        import fullmetalcopy.asynchronous.apg.copy as _apg_copy
+        import fullmetalcopy.asynchronous.apg.copycsv as _apg_copy
         await _apg_copy.copy_from_csv(async_connection, csv_file, table_name,
                                       sep, null, columns, headers, schema)
     else:
