@@ -20,6 +20,11 @@ class XY(Base):
     y: Mapped[int] = mapped_column(Integer)
 
 
+def add_driver(url: str, driver: str) -> str:
+    start, middle, end = url.split(':')
+    return f"{start}+{driver}:{middle}:{end}"
+
+
 def write_csv(csv_file: io.BytesIO) -> None:
     csv_file.writelines([
         b'id,x,y\n',
@@ -29,10 +34,26 @@ def write_csv(csv_file: io.BytesIO) -> None:
     csv_file.seek(0)
 
 
-def test_simple_copy() -> None:
+def test_simple_copy_pg3() -> None:
     with testing.postgresql.Postgresql() as postgresql:
-        print(postgresql.url())
-        engine: Engine = create_engine(postgresql.url())
+        url: str = add_driver(postgresql.url(), 'psycopg')
+        engine: Engine = create_engine(url)
+        Base.metadata.create_all(engine)
+        with engine.connect() as connection:
+            with io.BytesIO() as csv_file:
+                write_csv(csv_file)
+                copy_from_csv(connection, csv_file, 'xy')
+            connection.commit()
+
+            query = select(XY)
+            results = connection.execute(query)
+            assert list(results.fetchall()) == [(1, 'a', 33), (2, 'b', 66)]
+
+
+def test_simple_copy_pg2() -> None:
+    with testing.postgresql.Postgresql() as postgresql:
+        url: str = add_driver(postgresql.url(), 'psycopg2')
+        engine: Engine = create_engine(url)
         Base.metadata.create_all(engine)
         with engine.connect() as connection:
             with io.BytesIO() as csv_file:
@@ -46,4 +67,4 @@ def test_simple_copy() -> None:
 
 
 if __name__ == '__main__':
-    test_simple_copy()
+    test_simple_copy_pg2()

@@ -44,5 +44,4 @@ def copy_from_csv(
         with _io.TextIOWrapper(csv_file, encoding='utf-8') as text_file:
             for row in _csv.reader(text_file):
                 values: list[str | None] = [None if val == null else val for val in row]
-                #copy.write_row(values)
-                copy.write_row([val.encode() if not val is None else val for val in values])
+                copy.write_row(values)
