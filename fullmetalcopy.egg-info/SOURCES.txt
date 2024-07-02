@@ -13,6 +13,7 @@ fullmetalcopy.egg-info/not-zip-safe
 fullmetalcopy.egg-info/requires.txt
 fullmetalcopy.egg-info/top_level.txt
 fullmetalcopy/asynchronous/__init__.py
-fullmetalcopy/asynchronous/copy.py
+fullmetalcopy/asynchronous/copycsv.py
 fullmetalcopy/synchronous/__init__.py
-fullmetalcopy/synchronous/copy.py
+fullmetalcopy/synchronous/copycsv.py
+tests/test_copy.py

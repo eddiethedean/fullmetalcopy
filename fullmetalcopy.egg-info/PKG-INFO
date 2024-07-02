@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: fullmetalcopy
-Version: 0.0.3
+Version: 0.0.4
 Summary: Functions for faster PostgreSQL bulk inserts by copying to sql table.
 Author: Odos Matthews
 License: MIT

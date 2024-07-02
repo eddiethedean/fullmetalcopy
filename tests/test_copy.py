@@ -31,6 +31,7 @@ def write_csv(csv_file: io.BytesIO) -> None:
 
 def test_simple_copy() -> None:
     with testing.postgresql.Postgresql() as postgresql:
+        print(postgresql.url())
         engine: Engine = create_engine(postgresql.url())
         Base.metadata.create_all(engine)
         with engine.connect() as connection:
@@ -42,3 +43,7 @@ def test_simple_copy() -> None:
             query = select(XY)
             results = connection.execute(query)
             assert list(results.fetchall()) == [(1, 'a', 33), (2, 'b', 66)]
+
+
+if __name__ == '__main__':
+    test_simple_copy()
