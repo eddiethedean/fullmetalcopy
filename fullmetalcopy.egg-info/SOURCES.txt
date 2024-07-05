@@ -16,4 +16,5 @@ fullmetalcopy/asynchronous/__init__.py
 fullmetalcopy/asynchronous/copycsv.py
 fullmetalcopy/synchronous/__init__.py
 fullmetalcopy/synchronous/copycsv.py
-tests/test_copy.py
+tests/test_async_copy.py
+tests/test_sync_copy.py
