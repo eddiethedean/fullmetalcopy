@@ -1,14 +1,15 @@
-import io as _io
+from typing import BinaryIO
 
 import asyncpg as _asyncpg
 import sqlalchemy.ext.asyncio as _sa_asyncio
 
 import fullmetalcopy.asynchronous.apg.connection as _connection
+import fullmetalcopy.names as _names
 
 
 async def copy_from_csv(
     async_connection: _sa_asyncio.AsyncConnection,
-    csv_file: _io.BytesIO,
+    csv_file: BinaryIO,
     table_name: str,
     sep: str = ",",
     null: str = "",
@@ -19,8 +20,12 @@ async def copy_from_csv(
     """
     Copy CSV file to PostgreSQL table.
 
+    ``adapt_names`` may skip the first line when ``headers`` is True; asyncpg is always
+    called with ``header=False`` so it does not skip an extra line.
+
     Example
     -------
+    >>> import sqlalchemy as sa
     >>> from sqlalchemy.ext.asyncio import create_async_engine
     >>> from fullmetalcopy.asynchronous.apg.copycsv import copy_from_csv
 
@@ -32,15 +37,16 @@ async def copy_from_csv(
 
     >>> await async_engine.dispose()
     """
+    _, column_names = _names.adapt_names(csv_file, table_name, sep, columns, headers)
     apg_async_connection: _asyncpg.Connection
     apg_async_connection = await _connection.get_driver_connection(async_connection)
     await apg_async_connection.copy_to_table(
         table_name,
         source=csv_file,
         delimiter=sep,
-        header=headers,
+        header=False,
         null=null,
-        columns=columns,
+        columns=column_names,
         schema_name=schema,
         format="csv",
     )

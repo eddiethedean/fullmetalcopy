@@ -1,5 +1,6 @@
 import csv as _csv
 import io as _io
+from typing import BinaryIO
 
 import psycopg.connection as _pg3_connection
 import psycopg.cursor as _pg3_cursor
@@ -13,7 +14,7 @@ import fullmetalcopy.synchronous.pg3.connection as _connection
 
 def copy_from_csv(
     connection: _sa.engine.base.Connection,
-    csv_file: _io.BytesIO,
+    csv_file: BinaryIO,
     table_name: str,
     sep: str = ",",
     null: str = "",
@@ -23,6 +24,9 @@ def copy_from_csv(
 ) -> None:
     """
     Copy CSV file to PostgreSQL table.
+
+    Rows are read with :py:mod:`csv` and sent with ``copy.write_row``. ``null`` is compared to
+    each cell as text: when ``null`` is the default ``""``, every empty field becomes NULL.
 
     Example
     -------
@@ -35,15 +39,18 @@ def copy_from_csv(
             copy_from_csv(connection, csv_file, 'people')
         connection.commit()
     """
-    table_name, column_names = _names.adapt_names(
-        csv_file, table_name, sep, columns, headers, schema
-    )
+    table_name, column_names = _names.adapt_names(csv_file, table_name, sep, columns, headers)
     if column_names is None:
         raise ValueError("columns must be provided when headers is False")
-    query: _sql.Composed = _query.create_copy_query(table_name, column_names)
+    query: _sql.Composed = _query.create_copy_query(table_name, column_names, schema=schema)
     pg3_connection: _pg3_connection.Connection = _connection.get_driver_connection(connection)
     cursor: _pg3_cursor.Cursor = pg3_connection.cursor()
+    ncols = len(column_names)
     with cursor.copy(query) as copy, _io.TextIOWrapper(csv_file, encoding="utf-8") as text_file:
         for row in _csv.reader(text_file):
+            if len(row) != ncols:
+                raise ValueError(
+                    f"CSV row has {len(row)} fields, expected {ncols} (columns: {column_names!r})"
+                )
             values: list[str | None] = [None if val == null else val for val in row]
             copy.write_row(values)

@@ -83,6 +83,11 @@ async def main() -> None:
 
 `copy_from_csv` / `async_copy_from_csv` accept the same keyword options (`sep`, `null`, `columns`, `headers`, `schema`) as the underlying implementations; see the docstrings in `fullmetalcopy.synchronous.copycsv` and `fullmetalcopy.asynchronous.copycsv`.
 
+## CSV and `null` semantics
+
+- Header rows are parsed as UTF-8. With **psycopg3**, each row is read with Python’s `csv` module and must have the same number of fields as the target column list (or an error is raised).
+- On the **psycopg3** path, any cell that equals the `null` string is stored as SQL NULL. The default `null=""` therefore maps **empty** fields to NULL; use another sentinel (for example PostgreSQL’s default `"\N"` in text mode) if you need to preserve empty strings.
+
 ## Project links
 
 - Source: [github.com/eddiethedean/fullmetalcopy](https://github.com/eddiethedean/fullmetalcopy)

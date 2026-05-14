@@ -1,4 +1,4 @@
-import io as _io
+from typing import BinaryIO
 
 import sqlalchemy as _sa
 
@@ -7,7 +7,7 @@ import fullmetalcopy.drivers as _drivers
 
 def copy_from_csv(
     connection: _sa.engine.base.Connection,
-    csv_file: _io.BytesIO,
+    csv_file: BinaryIO,
     table_name: str,
     sep: str = ",",
     null: str = "",
@@ -16,7 +16,15 @@ def copy_from_csv(
     schema: str | None = None,
 ) -> None:
     """
-    Copy CSV file to PostgreSQL table.
+    Copy CSV bytes from ``csv_file`` into a PostgreSQL table.
+
+    ``csv_file`` must be binary-mode (e.g. ``io.BytesIO`` or ``open(..., \"rb\")``).
+
+    ``null`` is passed to the active driver. On the **psycopg3** implementation, each
+    cell that compares equal to ``null`` is sent as SQL NULL; the default ``\"\"`` maps
+    empty fields to NULL.
+
+    ``schema`` sets the PostgreSQL schema for the target table (``search_path`` is not changed).
 
     Example
     -------
@@ -29,6 +37,7 @@ def copy_from_csv(
             copy_from_csv(connection, csv_file, 'people')
         connection.commit()
     """
+    _drivers.require_postgresql(connection)
     driver: str = _drivers.connection_driver_name(connection)
 
     if driver == "psycopg":

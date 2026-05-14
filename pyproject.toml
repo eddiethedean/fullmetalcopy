@@ -49,6 +49,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/eddiethedean/fullmetalcopy"
+Repository = "https://github.com/eddiethedean/fullmetalcopy"
 
 [tool.setuptools.packages.find]
 where = ["."]
