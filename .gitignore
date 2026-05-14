@@ -7,6 +7,7 @@ __pycache__/
 *.egg
 *.egg-info/
 fullmetalcopy.egg-info/
+fullmetalcopy.egg-info
 .eggs-info/
 dist/
 build/
@@ -31,6 +32,7 @@ coverage.xml
 # Type checkers & linters
 .mypy_cache/
 .ruff_cache/
+.ruff_cache
 .dmypy.json
 dmypy.json
 tests/.mypy_cache/

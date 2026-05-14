@@ -181,6 +181,17 @@ pytest
 
 ---
 
+## Releasing
+
+1. Align the version in [`pyproject.toml`](pyproject.toml) and [`fullmetalcopy/__init__.py`](fullmetalcopy/__init__.py).
+2. Update [`CHANGELOG.md`](CHANGELOG.md).
+3. Run `ruff format .`, `ruff check .`, `mypy fullmetalcopy`, and `pytest`.
+4. Build artifacts: `python -m build` (optionally `twine check dist/*`).
+5. Tag: `git tag -s v0.2.0 -m "Release 0.2.0"` then `git push origin v0.2.0`.
+6. Upload to PyPI (trusted publishing or `twine upload dist/*`).
+
+---
+
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE). Release history: [CHANGELOG.md](CHANGELOG.md).

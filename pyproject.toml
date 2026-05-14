@@ -50,6 +50,7 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/eddiethedean/fullmetalcopy"
 Repository = "https://github.com/eddiethedean/fullmetalcopy"
+Changelog = "https://github.com/eddiethedean/fullmetalcopy/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["."]
