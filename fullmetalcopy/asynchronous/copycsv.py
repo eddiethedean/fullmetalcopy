@@ -1,4 +1,3 @@
-import typing as _t
 import io as _io
 
 import sqlalchemy.ext.asyncio as _sa_asyncio
@@ -10,11 +9,11 @@ async def copy_from_csv(
     async_connection: _sa_asyncio.AsyncConnection,
     csv_file: _io.BytesIO,
     table_name: str,
-    sep: str = ',',
-    null: str = '',
-    columns: _t.Optional[list[str]] = None,
+    sep: str = ",",
+    null: str = "",
+    columns: list[str] | None = None,
     headers: bool = True,
-    schema:_t.Optional[str] = None
+    schema: str | None = None,
 ) -> None:
     """
     Copy CSV file to PostgreSQL table.
@@ -22,24 +21,28 @@ async def copy_from_csv(
     Example
     -------
     >>> from sqlalchemy.ext.asyncio import create_async_engine
-    >>> from pgcopyinsert.asynchronous.copy import copy_from_csv
+    >>> from fullmetalcopy.asynchronous.copycsv import copy_from_csv
 
     >>> async_engine = sa.create_async_engine('postgresql+asyncpg://user:password@host:port/dbname')
     >>> async with async_engine.connect() as async_connection:
-    ...     with open('people.csv', 'br') as csv_file:
+    ...     with open("people.csv", "rb") as csv_file:
     ...         await copy_from_csv(async_connection, csv_file, 'people')
     ...     await async_connection.commit()
 
     >>> await async_engine.dispose()
     """
     driver: str = _drivers.connection_driver_name(async_connection)
-    if driver == 'psycopg':
+    if driver == "psycopg":
         import fullmetalcopy.asynchronous.pg3.copycsv as _pg3_copy
-        await _pg3_copy.copy_from_csv(async_connection, csv_file, table_name,
-                                      sep, null, columns, headers, schema)
-    elif driver == 'asyncpg':
+
+        await _pg3_copy.copy_from_csv(
+            async_connection, csv_file, table_name, sep, null, columns, headers, schema
+        )
+    elif driver == "asyncpg":
         import fullmetalcopy.asynchronous.apg.copycsv as _apg_copy
-        await _apg_copy.copy_from_csv(async_connection, csv_file, table_name,
-                                      sep, null, columns, headers, schema)
+
+        await _apg_copy.copy_from_csv(
+            async_connection, csv_file, table_name, sep, null, columns, headers, schema
+        )
     else:
-        raise ValueError('driver must be psycopg of asyncpg')
+        raise ValueError("driver must be psycopg or asyncpg")

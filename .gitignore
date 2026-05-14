@@ -1,17 +1,53 @@
-pgcopyinsert.egg-info/
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg
+*.egg-info/
+fullmetalcopy.egg-info/
+.eggs-info/
 dist/
 build/
-.vscode/
-.ipynb_checkpoints/
-tests/.mypy_cache/
-tests/__pycache__/
-.DS_Store
-.coverage
-.mypy_cache/
-data/
+sdist/
+wheels/
+pip-wheel-metadata/
+
+# Virtual environments
 .venv/
+venv/
+ENV/
+
+# Test & coverage
 .pytest_cache/
-__pycache__/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+
+# Type checkers & linters
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+tests/.mypy_cache/
+
+# Jupyter
+.ipynb_checkpoints/
 notebooks/
-.idea
-notebooks/
+
+# Local / secrets
+.env
+.env.*
+!.env.example
+
+# Data (local datasets)
+data/
+
+# Editors & OS
+.idea/
+.vscode/
+.DS_Store

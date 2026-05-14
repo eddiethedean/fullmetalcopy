@@ -1,1 +1,3 @@
-sqlalchemy
+# Runtime dependency; full metadata and optional extras live in pyproject.toml.
+# Editable install with tests and lint: pip install -e ".[dev]"
+sqlalchemy>=2.0
